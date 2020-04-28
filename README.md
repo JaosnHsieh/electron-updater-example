@@ -1,46 +1,24 @@
-# electron-webpack-quick-start
-> A bare minimum project structure to get started developing with [`electron-webpack`](https://github.com/electron-userland/electron-webpack).
+# electron-updater-example
 
-Thanks to the power of `electron-webpack` this template comes packed with...
+this repo demonstrate how to use `electron-updater` with `generic` provider( a local http files server ) to auto update ( detect new version then quit, install new version ) on my `windows 10`.
 
-* Use of [`webpack-dev-server`](https://github.com/webpack/webpack-dev-server) for development
-* HMR for both `renderer` and `main` processes
-* Use of [`babel-preset-env`](https://github.com/babel/babel-preset-env) that is automatically configured based on your `electron` version
-* Use of [`electron-builder`](https://github.com/electron-userland/electron-builder) to package and build a distributable electron application
+## Reproduce auto update steps
 
-Make sure to check out [`electron-webpack`'s documentation](https://webpack.electron.build/) for more details.
+1. `$ git clone https://github.com/JaosnHsieh/electron-updater-example.git`
+2. `$ yarn`
+3. `$ yarn live-server` (it will start an http server on 8080 port, might have to run Powershell with Administrator )
+4. `$ yarn dist`
+5. copy `electron-webpack-quick-start Setup 0.0.1.exe`, `latest.yml` in `./dist/*` to `./www/*`
+6. change `package.json` version to `0.0.2`
+7. `$ yarn dist`
+8. copy `electron-webpack-quick-start Setup 0.0.2.exe`, `latest.yml` in `./dist/*` to `./www/*` ( replace `latest.yml` )
+9. double click `electron-webpack-quick-start Setup 0.0.1.exe` to install it.
+10. done. it should auto download 0.0.2 verison and quit and install it.
 
-## Getting Started
-Simply clone down this repository, install dependencies, and get started on your application.
+## references
 
-The use of the [yarn](https://yarnpkg.com/) package manager is **strongly** recommended, as opposed to using `npm`.
+electron-webpack-quick-start
+https://github.com/electron-userland/electron-webpack-quick-start
 
-```bash
-# create a directory of your choice, and copy template using curl
-mkdir new-electron-webpack-project && cd new-electron-webpack-project
-curl -fsSL https://github.com/electron-userland/electron-webpack-quick-start/archive/master.tar.gz | tar -xz --strip-components 1
-
-# or copy template using git clone
-git clone https://github.com/electron-userland/electron-webpack-quick-start.git
-cd electron-webpack-quick-start
-rm -rf .git
-
-# install dependencies
-yarn
-```
-
-### Development Scripts
-
-```bash
-# run application in development mode
-yarn dev
-
-# compile source code and create webpack output
-yarn compile
-
-# `yarn compile` & create build with electron-builder
-yarn dist
-
-# `yarn compile` & create unpacked build with electron-builder
-yarn dist:dir
-```
+Example using electron-updater with `generic` provider.
+https://gist.github.com/iffy/0ff845e8e3f59dbe7eaf2bf24443f104
