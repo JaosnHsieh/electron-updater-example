@@ -14,15 +14,15 @@
     "source-map-support": "^0.5.16"
   },
   "build": {
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://localhost:8080",
+        "channel": "latest",
+        "useMultipleRangeRequest": false
+      }
+    ],
     "win": {
-      "publish": [
-        {
-          "provider": "generic",
-          "url": "http://localhost:8080",
-          "channel": "latest",
-          "useMultipleRangeRequest": false
-        }
-      ],
       "target": [
         {
           "target": "NSIS",
