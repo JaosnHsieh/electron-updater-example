@@ -2,18 +2,33 @@
 
 this repo demonstrate how to use `electron-updater` with `generic` provider( a local http files server ) to auto update ( detect new version then quit, install new version ) on my `windows 10`.
 
-## Reproduce auto update steps
+## Install
 
-1. `$ git clone https://github.com/JaosnHsieh/electron-updater-example.git`
-2. `$ yarn`
-3. `$ yarn live-server` (it will start an http server on 8080 port, might have to run Powershell with Administrator )
-4. `$ yarn dist`
-5. copy `electron-webpack-quick-start Setup 0.0.1.exe`, `latest.yml` in `./dist/*` to `./www/*` ( mac  `electron-updater-example-0.0.1-mac.zip`, `electron-updater-example-0.0.1-mac.dmg` and `latest-mac.yml`)
-6. change `package.json` version to `0.0.2`
-7. `$ yarn dist`
-8. copy `electron-webpack-quick-start Setup 0.0.2.exe`, `latest.yml` in `./dist/*` to `./www/*` ( replace `latest.yml` ), ( mac  `electron-updater-example-0.0.2-mac.zip`, `electron-updater-example-0.0.2-mac.dmg` and `latest-mac.yml`)
-9. double click `electron-webpack-quick-start Setup 0.0.1.exe` to install it.
-10. done. it should auto download 0.0.2 verison and quit and install it.
+`$ git clone https://github.com/JaosnHsieh/electron-updater-example.git`
+
+`$ yarn`
+
+## Start http server ( generic provider and renderer index.html)
+
+`$ yarn live-server` (it will start an http server on 8080 port, might have to run Powershell with Administrator )
+
+## Packed app update
+
+start http server first
+
+1. `$ yarn dist` -> generate `v30.0.0` and copy to `www`
+
+2. modify version to `30.0.1` in `package.json` and `$ yarn dist`
+
+3. install `30.0.0` by opening `./www/*30.0.0*.(dmg|exe)`
+
+4. open the app and it will install the update
+
+## Unpacked app update ( dev )
+
+1. `$ yarn dist` -> generate `v30.0.0` and copy to `www`
+
+2. `$ yarn run dev`
 
 ## references
 

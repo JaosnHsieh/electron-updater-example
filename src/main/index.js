@@ -1,8 +1,4 @@
-'use strict';
-
-import { app, BrowserWindow, ipcMain } from 'electron';
-import * as path from 'path';
-import { format as formatUrl } from 'url';
+import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 
@@ -13,28 +9,43 @@ autoUpdater.on('checking-for-update', (...args) => {
   const msg = `$ checking-for-update args ${args}`;
   sendStatusToWindow(msg);
 });
-autoUpdater.on('update-available', (ev, info) => {
-  const msg = `$ update-available ev ${ev} info ${info}`;
+autoUpdater.on('update-available', (info) => {
+  const msg = `$ update-available  info ${JSON.stringify(info)}`;
   sendStatusToWindow(msg);
 });
-autoUpdater.on('update-not-available', (ev, info) => {
-  const msg = `$ update-not-available ev ${ev} info ${info}`;
+autoUpdater.on('update-not-available', (info) => {
+  const msg = `$ update-not-available info ${JSON.stringify(info)}`;
   sendStatusToWindow(msg);
 });
 autoUpdater.on('error', (ev, err) => {
   const msg = `$ error ev ${ev} err ${err}`;
   sendStatusToWindow(msg);
 });
-autoUpdater.on('download-progress', (ev, progressObj) => {
-  const msg = `$ download-progress ev ${ev} progressObj ${progressObj}`;
-  sendStatusToWindow(msg);
-});
-autoUpdater.on('update-downloaded', (ev, info) => {
-  const msg = `$ update-downloaded ev ${ev} info ${info}`;
+autoUpdater.on('download-progress', (payload) => {
+  const msg = `$ download-progress payload ${JSON.stringify(payload)}`;
   sendStatusToWindow(msg);
 });
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Restart', 'Later'],
+    title: 'Application Update',
+    message: process.platform === 'win32' ? releaseNotes : releaseName,
+    detail:
+      'A new version has been downloaded. Restart the application to apply the updates.',
+  };
+
+  sendStatusToWindow(
+    `$ update-downloaded releaseNotes ${releaseNotes} releaseName ${releaseName} quitAndInstall in 20s`,
+  );
+  setTimeout(() => {
+    autoUpdater.quitAndInstall();
+  }, 1000 * 20);
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) autoUpdater.quitAndInstall();
+  });
+});
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow;
@@ -48,21 +59,10 @@ function createMainWindow() {
     webPreferences: { nodeIntegration: true },
   });
 
-  if (isDevelopment) {
-    window.webContents.openDevTools();
-  }
+  window.webContents.openDevTools();
 
-  if (isDevelopment) {
-    window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
-  } else {
-    window.loadURL(
-      formatUrl({
-        pathname: path.join(__dirname, 'index.html'),
-        protocol: 'file',
-        slashes: true,
-      }),
-    );
-  }
+  window.loadURL(`http://localhost:8080/renderer/index.html`);
+  // window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
 
   window.on('closed', () => {
     mainWindow = null;
@@ -93,29 +93,12 @@ app.on('activate', () => {
   }
 });
 
-autoUpdater.on('update-downloaded', (ev, info) => {
-  // Wait 5 seconds, then quit and install
-  // In your application, you don't need to wait 5 seconds.
-  // You could call autoUpdater.quitAndInstall(); immediately
-  setTimeout(function () {
-    autoUpdater.quitAndInstall();
-  }, 5000);
-});
-setInterval(() => {
-  console.log(
-    'sendStatusToWindow',
-    sendStatusToWindow(`interval message every 5s ${new Date()} `),
-  );
-}, 5000);
-
 // create main BrowserWindow when electron is ready
 app.on('ready', () => {
   mainWindow = createMainWindow();
-  sendStatusToWindow(`current version = ${app.getVersion()}`);
-  autoUpdater.checkForUpdates();
 });
 
-ipcMain.handle('test', async (event, payload) => {
-  console.log('payload', payload);
-  return 2;
+ipcMain.once('renderer:js:end', () => {
+  sendStatusToWindow(`current version = ${app.getVersion()}`);
+  autoUpdater.checkForUpdates();
 });

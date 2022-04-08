@@ -1,13 +1,15 @@
 {
   "name": "electron-updater-example",
-  "version": "0.0.1",
+  "version": "30.0.0",
   "license": "MIT",
   "scripts": {
     "live-server": "live-server www --port 8080",
-    "dev": "electron-webpack dev",
     "compile": "electron-webpack",
-    "dist": "yarn compile && electron-builder",
-    "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
+    "dev": "yarn compile && cp -a ./dist/renderer ./www && cp ./dev-app-update.yml ./dist/main/ && electron ./dist/main/main.js",
+    "dist": "yarn compile && electron-builder && yarn copy-packed-app-www",
+    "copy-packed-app-www": "cp -r ./dist/* ./www",
+    "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
+    "clean": "rm -rf node_modules dist www/*"
   },
   "dependencies": {
     "electron-log": "^4.1.1",

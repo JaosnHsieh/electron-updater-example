@@ -1,0 +1,12 @@
+version: 30.0.2
+files:
+  - url: electron-updater-example-30.0.2-mac.zip
+    sha512: u2xPuNW1prLdjXXTAZ9uk7PT3+cMrRR/v7Qa9ZUaUZZiSYVGppS/++pl7TmoVvUTh59qtBKBXDyaiQ5Jjc8/Kw==
+    size: 65882620
+    blockMapSize: 70860
+  - url: electron-updater-example-30.0.2.dmg
+    sha512: 4mlpG9RfEJNuJkZBWLCZuuugScCOGX/xdE9ZPSCw7TedYSy4a/zdUbbbUq0UekfHn24h20RVmovDT3GfjzOKMA==
+    size: 67906301
+path: electron-updater-example-30.0.2-mac.zip
+sha512: u2xPuNW1prLdjXXTAZ9uk7PT3+cMrRR/v7Qa9ZUaUZZiSYVGppS/++pl7TmoVvUTh59qtBKBXDyaiQ5Jjc8/Kw==
+releaseDate: '2022-04-08T05:40:57.055Z'

@@ -1,0 +1,4 @@
+# from https://github.com/electron-userland/electron-builder/issues/1505#issuecomment-494375162
+provider: generic
+url: http://localhost:8080
+channel: latest
