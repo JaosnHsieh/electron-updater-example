@@ -7,7 +7,7 @@
     "compile": "electron-webpack",
     "dev": "yarn compile && cp -a ./dist/renderer ./www && cp ./dev-app-update.yml ./dist/main/ && electron ./dist/main/main.js",
     "dist": "yarn compile && electron-builder && yarn copy-packed-app-www",
-    "copy-packed-app-www": "cp -r ./dist/* ./www",
+    "copy-packed-app-www": "cp -r ./dist ./www",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "clean": "rm -rf node_modules dist www/*"
   },
